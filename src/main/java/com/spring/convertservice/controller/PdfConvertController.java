@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(path = "api/v1/fileToPDF")
 public class PdfConvertController {
 
-    @PostMapping("/add")
+    @PostMapping("/")
     public ResponseEntity<?> convertPDFFileEndpoint() {
 
         return ResponseEntity.ok().build();
