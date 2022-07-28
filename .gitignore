@@ -1,5 +1,5 @@
 /.idea/
-mvnw
-mvnw.cmd
+/mvnw
+/mvnw.cmd
 /target/
 /.mvn/
