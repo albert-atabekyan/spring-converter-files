@@ -12,7 +12,7 @@ import java.io.OutputStream;
 
 public class PdfConvertService {
 
-    private OutputStream generatePDFFromImage(InputStream inputStream, String name) throws IOException {
+    public OutputStream generatePDFFromImage(InputStream inputStream, String name) throws IOException {
         PDPageContentStream contents;
         PDDocument doc = new PDDocument();
 
