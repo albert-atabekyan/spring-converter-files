@@ -6,17 +6,16 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
+import java.nio.file.Files;
 
 public class PdfConvertService {
 
-    public OutputStream generatePDFFromImage(InputStream inputStream, String name) throws IOException {
+    public OutputStream generatePDFFromImage(File file) throws IOException {
         PDPageContentStream contents;
         PDDocument doc = new PDDocument();
 
-        PDImageXObject pdImage = PDImageXObject.createFromByteArray(doc, IOUtils.toByteArray(inputStream), name);
+        PDImageXObject pdImage = PDImageXObject.createFromByteArray(doc, Files.readAllBytes(file.toPath()), file.getName());
 
         PDPage page = new PDPage();
         doc.addPage(page);
@@ -24,7 +23,9 @@ public class PdfConvertService {
         contents = new PDPageContentStream(doc, page);
         contents.drawImage(pdImage, 0.0F, 0.0F, pdImage.getWidth(), pdImage.getHeight());
 
-        OutputStream outputStream = doc.getDocument().createCOSStream().createOutputStream();
+        OutputStream outputStream = new ByteArrayOutputStream();
+
+        doc.save(outputStream);
 
         doc.close();
 
