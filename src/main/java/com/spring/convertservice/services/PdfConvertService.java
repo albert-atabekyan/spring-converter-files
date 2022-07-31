@@ -1,12 +1,11 @@
 package com.spring.convertservice.services;
 
+import com.aspose.words.Document;
+import com.aspose.words.SaveFormat;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-import org.apache.poi.xwpf.converter.pdf.PdfConverter;
-import org.apache.poi.xwpf.converter.pdf.PdfOptions;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 import java.io.*;
 
@@ -35,14 +34,11 @@ public class PdfConvertService {
         return outputStream;
     }
 
-    public OutputStream generatePDFFromDocx(InputStream is) throws IOException {
-        try (OutputStream out = new ByteArrayOutputStream()) {
-            XWPFDocument document = new XWPFDocument(is);
+    public OutputStream generatePDFFromDocx(InputStream is) throws Exception {
+        Document document = new Document(is);
+        OutputStream outputStream = new ByteArrayOutputStream();
+        document.save(outputStream, SaveFormat.PDF);
 
-            PdfOptions options = PdfOptions.create();
-            PdfConverter.getInstance().convert(document, out, options);
-
-            return out;
-        }
+        return outputStream;
     }
 }
