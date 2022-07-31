@@ -1,5 +1,6 @@
 package com.spring.convertservice.services;
 
+import com.aspose.slides.Presentation;
 import com.aspose.words.Document;
 import com.aspose.words.SaveFormat;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -38,6 +39,14 @@ public class PdfConvertService {
         Document document = new Document(is);
         OutputStream outputStream = new ByteArrayOutputStream();
         document.save(outputStream, SaveFormat.PDF);
+
+        return outputStream;
+    }
+
+    public OutputStream generatePDFFromPptx(InputStream is) {
+        Presentation presentation = new Presentation(is);
+        OutputStream outputStream = new ByteArrayOutputStream();
+        presentation.save(outputStream, com.aspose.slides.SaveFormat.Pdf);
 
         return outputStream;
     }
