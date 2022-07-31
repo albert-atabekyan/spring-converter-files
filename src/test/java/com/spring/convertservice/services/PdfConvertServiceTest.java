@@ -37,10 +37,27 @@ class PdfConvertServiceTest {
 
         Path docxPath = Paths.get("src/test/static/docx/" + name + ".docx");
 
-        InputStream image = Files.newInputStream(docxPath);
+        InputStream docxDoc = Files.newInputStream(docxPath);
 
         File resultFile = File.createTempFile("Test",".pdf");
-        ByteArrayOutputStream byteArrayOutputStream = (ByteArrayOutputStream) convertService.generatePDFFromDocx(image);
+        ByteArrayOutputStream byteArrayOutputStream = (ByteArrayOutputStream) convertService.generatePDFFromDocx(docxDoc);
+        try(OutputStream outputStream = new FileOutputStream(resultFile)) {
+            byteArrayOutputStream.writeTo(outputStream);
+        }
+
+        System.out.println("Please find your PDF File here: " + resultFile.getAbsolutePath());
+    }
+
+    @Test
+    public void testGeneratingPDFFromPptx() throws Exception {
+        String name = "1";
+
+        Path pptxPath = Paths.get("src/test/static/pptx/" + name + ".pptx");
+
+        InputStream pptxDoc = Files.newInputStream(pptxPath);
+
+        File resultFile = File.createTempFile("Test",".pdf");
+        ByteArrayOutputStream byteArrayOutputStream = (ByteArrayOutputStream) convertService.generatePDFFromPptx(pptxDoc);
         try(OutputStream outputStream = new FileOutputStream(resultFile)) {
             byteArrayOutputStream.writeTo(outputStream);
         }
