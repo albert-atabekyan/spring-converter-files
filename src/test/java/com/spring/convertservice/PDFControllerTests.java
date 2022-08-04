@@ -15,8 +15,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import static org.assertj.core.api.Assertions.*;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @SpringBootTest
 public class PDFControllerTests {
@@ -64,7 +67,9 @@ public class PDFControllerTests {
         String extension = "pptx";
         String dot = ".";
 
-        FileInputStream fis = new FileInputStream("src\\test\\static\\pptx\\1" + dot + extension);
+        Path pptxPath = Paths.get("src/test/static/pptx/" + 1 + dot + extension);
+
+        InputStream fis = Files.newInputStream(pptxPath);
 
         MockMultipartFile multipartFile = new MockMultipartFile(
                 "file",
@@ -95,7 +100,9 @@ public class PDFControllerTests {
         String extension = "jpg";
         String dot = ".";
 
-        FileInputStream fis = new FileInputStream("src\\test\\static\\image\\1" + dot + extension);
+        Path jpgPath = Paths.get("src/test/static/image/" + 1 + dot + extension);
+
+        InputStream fis = Files.newInputStream(jpgPath);
 
         MockMultipartFile multipartFile = new MockMultipartFile(
                 "file",
@@ -126,7 +133,9 @@ public class PDFControllerTests {
         String extension = "jpeg";
         String dot = ".";
 
-        FileInputStream fis = new FileInputStream("src\\test\\static\\image\\1" + dot + extension);
+        Path jpegPath = Paths.get("src/test/static/image/" + 1 + dot + extension);
+
+        InputStream fis = Files.newInputStream(jpegPath);
 
         MockMultipartFile multipartFile = new MockMultipartFile(
                 "file",
@@ -157,7 +166,9 @@ public class PDFControllerTests {
         String extension = "gif";
         String dot = ".";
 
-        FileInputStream fis = new FileInputStream("src\\test\\static\\image\\1" + dot + extension);
+        Path gifPath = Paths.get("src/test/static/image/" + 1 + dot + extension);
+
+        InputStream fis = Files.newInputStream(gifPath);
 
         MockMultipartFile multipartFile = new MockMultipartFile(
                 "file",
@@ -188,7 +199,9 @@ public class PDFControllerTests {
         String extension = "png";
         String dot = ".";
 
-        FileInputStream fis = new FileInputStream("src\\test\\static\\image\\1" + dot + extension);
+        Path pngPath = Paths.get("src/test/static/image/" + 1 + dot + extension);
+
+        InputStream fis = Files.newInputStream(pngPath);
 
         MockMultipartFile multipartFile = new MockMultipartFile(
                 "file",
