@@ -6,6 +6,8 @@
     <modules>
         <module>convert-pdf</module>
 		<module>convert-router</module>
+        <module>oauth-authorization-server</module>
+		<module>api-gateway</module>
 	</modules>
     <parent>
 		<groupId>org.springframework.boot</groupId>
