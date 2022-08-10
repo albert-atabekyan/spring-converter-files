@@ -8,7 +8,8 @@
 		<module>convert-router</module>
         <module>oauth-authorization-server</module>
 		<module>api-gateway</module>
-	</modules>
+        <module>kafka-notification-producer</module>
+    </modules>
     <parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
