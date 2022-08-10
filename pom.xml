@@ -9,6 +9,7 @@
         <module>oauth-authorization-server</module>
 		<module>api-gateway</module>
         <module>kafka-notification-producer</module>
+        <module>kafka-notification-consumer</module>
     </modules>
     <parent>
 		<groupId>org.springframework.boot</groupId>
