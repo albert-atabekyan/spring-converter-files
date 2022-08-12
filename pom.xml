@@ -6,11 +6,10 @@
     <modules>
         <module>convert-pdf</module>
 		<module>convert-router</module>
-        <module>oauth-authorization-server</module>
-		<module>api-gateway</module>
         <module>kafka-notification-producer</module>
         <module>kafka-notification-consumer</module>
-    </modules>
+		<module>api-gateway</module>
+	</modules>
     <parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
