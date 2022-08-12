@@ -6,14 +6,19 @@ import com.spring.jwt.model.UserModel;
 import com.spring.jwt.service.UserService;
 import com.spring.jwt.utility.JWTUtility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.security.Principal;
+import java.util.Objects;
 
 @RestController
 public class HomeController {
@@ -41,6 +46,51 @@ public class HomeController {
     @GetMapping("/")
     public String home() {
         return "Welcome!!";
+    }
+
+    @PostMapping("/convertFile/{extension}")
+    public ResponseEntity<?> convertPDFFileEndpoint(@PathVariable String extension,
+                                                    Principal principal,
+                                                    @RequestParam("file") MultipartFile file
+    ) {
+        RestTemplate restTemplate = new RestTemplate();
+
+        MultiValueMap<String, Object> multiValueMap =
+                new LinkedMultiValueMap<>();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+        multiValueMap.add("file", file.getResource());
+
+        HttpEntity<MultiValueMap<String, Object>> multiValueMapHttpEntity
+                = new HttpEntity<>(multiValueMap, headers);
+
+        ResponseEntity<byte[]> responseEntity =
+                restTemplate.postForEntity("http://localhost:8081/api/v1/convertFile/" + extension
+                        , multiValueMapHttpEntity
+                        , byte[].class);
+
+        if(responseEntity.getStatusCode() == HttpStatus.BAD_REQUEST) {
+            return ResponseEntity.badRequest().body(responseEntity.getBody());
+        } else if(responseEntity.getStatusCode() == HttpStatus.OK) {
+            ResponseEntity<String> kafkaResponse =
+                restTemplate.postForEntity("http://localhost:8080/api/v1/sendMessage",
+                        principal.getName()
+                                + " "
+                                + extension,
+                        String.class);
+
+            if(kafkaResponse.getStatusCode() == HttpStatus.OK) {
+                if(extension.equals("pdf")) {
+                    return ResponseEntity.ok()
+                            .contentType(MediaType.APPLICATION_PDF)
+                            .body(responseEntity.getBody());
+                }
+            }
+        }
+
+        return ResponseEntity.badRequest().body("Unexpected error");
     }
 
     @PostMapping("/authenticate")
