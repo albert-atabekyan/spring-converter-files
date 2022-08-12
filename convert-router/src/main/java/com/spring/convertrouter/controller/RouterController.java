@@ -22,11 +22,13 @@ public class RouterController {
             @RequestParam("file") MultipartFile file
                                                     ) {
         String[] extensions = {"gif", "jpeg", "jpg", "png", "docx", "pptx"};
+
         String extension = Objects.requireNonNull(file.getOriginalFilename())
                 .substring(file.getOriginalFilename().lastIndexOf(".") + 1);
 
-        if(!Arrays.asList(extensions).contains(extension))
-            throw new IllegalArgumentException("Not contain available extension");
+        if(!Arrays.asList(extensions).contains(extension)) {
+            return ResponseEntity.badRequest().body("Not contain available extension");
+        }
 
         RestTemplate restTemplate = new RestTemplate();
 
