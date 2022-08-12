@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
+
 @RestController
 @RequestMapping(path = "api/v1/convertFile")
 public class RouterController {
@@ -18,12 +20,15 @@ public class RouterController {
     public ResponseEntity<?> convertPDFFileEndpoint(@PathVariable String extension,
                                                     @RequestParam("file") MultipartFile file
                                                     ) {
+        String[] extensions = {"gif", "jpeg", "jpg", "png", "docx", "pptx"};
+
+        if(!Arrays.asList(extensions).contains(extension))
+            throw new IllegalArgumentException("Not contain available extension");
 
         RestTemplate restTemplate = new RestTemplate();
 
         MultiValueMap<String, Object> multiValueMap =
                 new LinkedMultiValueMap<>();
-
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
