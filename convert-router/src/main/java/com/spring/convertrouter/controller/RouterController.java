@@ -11,16 +11,19 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 @RestController
 @RequestMapping(path = "api/v1/convertFile")
 public class RouterController {
 
-    @PostMapping("/{extension}")
-    public ResponseEntity<?> convertPDFFileEndpoint(@PathVariable String extension,
-                                                    @RequestParam("file") MultipartFile file
+    @PostMapping("/pdf")
+    public ResponseEntity<?> convertPDFFileEndpoint(
+            @RequestParam("file") MultipartFile file
                                                     ) {
         String[] extensions = {"gif", "jpeg", "jpg", "png", "docx", "pptx"};
+        String extension = Objects.requireNonNull(file.getOriginalFilename())
+                .substring(file.getOriginalFilename().lastIndexOf(".") + 1);
 
         if(!Arrays.asList(extensions).contains(extension))
             throw new IllegalArgumentException("Not contain available extension");
