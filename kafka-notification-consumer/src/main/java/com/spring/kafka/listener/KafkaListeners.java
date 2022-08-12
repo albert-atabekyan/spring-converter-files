@@ -9,7 +9,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class KafkaListeners {
 
-    EmailService emailService = new EmailService();
+
+    private EmailService emailService;
+
+    @Autowired
+    public void setEmailService(EmailService emailService) {
+        this.emailService = emailService;
+    }
 
     @KafkaListener(topics = "test", groupId = "groupId")
     void listener(String data) {

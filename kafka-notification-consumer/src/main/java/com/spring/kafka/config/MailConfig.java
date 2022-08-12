@@ -1,13 +1,14 @@
 package com.spring.kafka.config;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.util.Properties;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class MailConfig {
 
     @Bean("gmail")
