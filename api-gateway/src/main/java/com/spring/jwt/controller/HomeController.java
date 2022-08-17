@@ -6,6 +6,7 @@ import com.spring.jwt.model.UserModel;
 import com.spring.jwt.service.UserService;
 import com.spring.jwt.utility.JWTUtility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -18,7 +19,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
-import java.util.Objects;
 
 @RestController
 public class HomeController {
@@ -48,6 +48,12 @@ public class HomeController {
         return "Welcome!!";
     }
 
+    @Value("${microservice.host.convert-router}")
+    String convertRouterHost;
+
+    @Value("${microservice.host.kafka-notification-producer}")
+    String kafkaNotificationProducerHost;
+
     @PostMapping("/convertFile/{extension}")
     public ResponseEntity<?> convertPDFFileEndpoint(@PathVariable String extension,
                                                     Principal principal,
@@ -67,7 +73,9 @@ public class HomeController {
                 = new HttpEntity<>(multiValueMap, headers);
 
         ResponseEntity<byte[]> responseEntity =
-                restTemplate.postForEntity("http://localhost:8081/api/v1/convertFile/" + extension
+                restTemplate.postForEntity("http://"
+                                + convertRouterHost
+                                +"/api/v1/convertFile/" + extension
                         , multiValueMapHttpEntity
                         , byte[].class);
 
@@ -75,7 +83,9 @@ public class HomeController {
             return ResponseEntity.badRequest().body(responseEntity.getBody());
         } else if(responseEntity.getStatusCode() == HttpStatus.OK) {
             ResponseEntity<String> kafkaResponse =
-                restTemplate.postForEntity("http://localhost:8080/api/v1/sendMessage",
+                restTemplate.postForEntity("http://"
+                                + kafkaNotificationProducerHost
+                                +"/api/v1/sendMessage",
                         principal.getName()
                                 + " "
                                 + extension,

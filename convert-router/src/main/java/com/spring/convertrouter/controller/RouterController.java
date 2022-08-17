@@ -50,7 +50,7 @@ public class RouterController {
 
 
         ResponseEntity<byte[]> responseEntity =
-                restTemplate.postForEntity("http://localhost:8082/api/v1/fileToPDF"
+                restTemplate.postForEntity("http://convert-pdf-service/api/v1/fileToPDF"
                         , multiValueMapHttpEntity
                         , byte[].class);
 

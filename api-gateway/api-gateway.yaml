@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway-deployment
+  labels:
+    app: api-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+        - name: convert-pdf
+          image: albertatabekyan/spring-boot:api-gateway-1
+          ports:
+            - containerPort: 80
+          env:
+            - name: DB_HOST
+              value: mysql
+            - name: DB_USERNAME
+              value: root
+            - name: DB_PASSWORD
+              value: root
+            - name: DB_DATABASE
+              value: user_registration
+            - name: CONVERT_ROUTER_SERVICE_HOST
+              value: convert-router-service
+            - name: KAFKA_NOTIFICATION_PRODUCER_SERVICE_HOST
+              value: kafka-producer-service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-gateway-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: api-gateway
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8084

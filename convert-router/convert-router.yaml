@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: convert-router-deployment
+  labels:
+    app: convert-router
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: convert-router
+  template:
+    metadata:
+      labels:
+        app: convert-router
+    spec:
+      containers:
+        - name: convert-router
+          image: albertatabekyan/spring-boot:convert-router-1
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: convert-router-service
+spec:
+  selector:
+    app: convert-router
+  ports:
+    - name: convert-router
+      port: 80
+      targetPort: 8081

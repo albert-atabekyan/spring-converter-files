@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: spring-boot
+spec:
+  containers:
+    - name: spring-boot
+      image: albertatabekyan/spring-boot:convert-pdf-1
+      ports:
+        - containerPort: 80

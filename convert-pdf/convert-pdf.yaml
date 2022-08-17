@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: convert-pdf-deployment
+  labels:
+    app: convert-pdf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: convert-pdf
+  template:
+    metadata:
+      labels:
+        app: convert-pdf
+    spec:
+      containers:
+        - name: convert-pdf
+          image: albertatabekyan/spring-boot:convert-pdf-1
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: convert-pdf-service
+spec:
+  selector:
+    app: convert-pdf
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8082
